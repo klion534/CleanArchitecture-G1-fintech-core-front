@@ -11,6 +11,7 @@ export const TransferMoneySchema = z.object({
       if (!value || value.length === 0) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
+          path: ['destinationAccountId'],
           message: 'La cuenta de destino es requerida',
         });
         return;
@@ -20,6 +21,7 @@ export const TransferMoneySchema = z.object({
       if (!uuidPattern.test(value)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
+          path: ['destinationAccountId'],
           message: 'Debe seleccionar una cuenta de destino válida',
         });
       }

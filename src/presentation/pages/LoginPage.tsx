@@ -59,35 +59,56 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="page-card">
-      <h2>Iniciar Sesión</h2>
-      <ErrorAlert error={generalError} />
-      <form onSubmit={handleSubmit} noValidate>
-        <Input
-          label="Correo Electrónico"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          error={fieldErrors['email']}
-          disabled={isSubmitting}
-          required
-        />
-        <Input
-          label="Contraseña"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          error={fieldErrors['password']}
-          disabled={isSubmitting}
-          required
-        />
-        <Button type="submit" isLoading={isSubmitting} disabled={isSubmitting}>
-          Ingresar
-        </Button>
-      </form>
-      <p style={{ marginTop: '1rem' }}>
-        ¿No tienes cuenta? <Link to="/register">Regístrate aquí</Link>
-      </p>
+    <div className="auth-shell">
+      <div className="auth-hero">
+        <div className="auth-brand-block">
+          <span className="brand-icon auth-brand-icon">F</span>
+          <span>Panel financiero</span>
+        </div>
+        <h2>Controla tus finanzas con claridad.</h2>
+        <p>
+          Gestiona tus cuentas, movimientos y transferencias desde un panel pensado para decisiones rápidas y seguros.
+        </p>
+        <ul className="auth-benefits">
+          <li>Resumen financiero en tiempo real</li>
+          <li>Transferencias seguras entre cuentas</li>
+          <li>Acceso protegido y experiencia premium</li>
+        </ul>
+      </div>
+
+      <div className="page-card auth-panel">
+        <div className="auth-header">
+          <p className="eyebrow">Bienvenido</p>
+          <h2>Iniciar Sesión</h2>
+        </div>
+        <ErrorAlert error={generalError} />
+        <form onSubmit={handleSubmit} noValidate>
+          <Input
+            label="Correo Electrónico"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            error={fieldErrors['email']}
+            disabled={isSubmitting}
+            required
+          />
+          <Input
+            label="Contraseña"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            error={fieldErrors['password']}
+            disabled={isSubmitting}
+            required
+          />
+          <Button type="submit" isLoading={isSubmitting} disabled={isSubmitting}>
+            Ingresar
+          </Button>
+        </form>
+        <p className="auth-switcher">
+          ¿No tienes cuenta? <Link to="/register">Regístrate aquí</Link>
+        </p>
+      </div>
     </div>
   );
 };

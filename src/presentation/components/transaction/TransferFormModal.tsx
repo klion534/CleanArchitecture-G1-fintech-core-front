@@ -32,9 +32,8 @@ export const TransferFormModal: React.FC<TransferFormModalProps> = ({
 }) => {
   const initialSourceAccountId = defaultSourceAccountId || accounts[0]?.id || '';
   const [sourceAccountId, setSourceAccountId] = useState(initialSourceAccountId);
-  const [destinationAccountId, setDestinationAccountId] = useState(
-    accounts.find((a) => a.id !== initialSourceAccountId)?.id || ''
-  );
+  const [destinationAccountId, setDestinationAccountId] = useState('');
+  const [destinationSearch, setDestinationSearch] = useState('');
   const [amountStr, setAmountStr] = useState('');
   const [description, setDescription] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -42,6 +41,10 @@ export const TransferFormModal: React.FC<TransferFormModalProps> = ({
   if (!isOpen) return null;
 
   const destinationOptions = accounts.filter((account) => account.id !== sourceAccountId);
+  const filteredDestinationOptions = destinationOptions.filter((account) => {
+    const searchValue = destinationSearch.trim().toLowerCase();
+    return !searchValue || account.accountNumber.toLowerCase().includes(searchValue);
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -119,25 +122,46 @@ export const TransferFormModal: React.FC<TransferFormModalProps> = ({
               )}
             </div>
 
-            <div className="input-field">
-              <label htmlFor="transfer-destination">Cuenta de Destino</label>
-              <select
-                id="transfer-destination"
-                className="input-control"
-                value={destinationAccountId}
-                onChange={(e) => setDestinationAccountId(e.target.value)}
-                disabled={isLoading || destinationOptions.length === 0}
-              >
-                <option value="">Selecciona una cuenta destino</option>
-                {destinationOptions.map((acc) => (
-                  <option key={acc.id} value={acc.id}>
-                    {acc.accountNumber} - {acc.status === 'ACTIVE' ? 'Activa' : 'Congelada'}
-                  </option>
-                ))}
-              </select>
-              {fieldErrors['destinationAccountId'] && (
-                <span className="error-message">{fieldErrors['destinationAccountId']}</span>
-              )}
+            <div className="transfer-destination-panel">
+              <div className="input-field transfer-search-field">
+                <label htmlFor="transfer-destination-search">Buscar cuenta de destino</label>
+                <input
+                  id="transfer-destination-search"
+                  className="input-control"
+                  type="text"
+                  placeholder="Busca por número de cuenta"
+                  value={destinationSearch}
+                  onChange={(e) => setDestinationSearch(e.target.value)}
+                  disabled={isLoading || destinationOptions.length === 0}
+                />
+                <small className="field-hint">
+                  Busca por número para transferir a una cuenta ajena sin usar IDs internos.
+                </small>
+              </div>
+
+              <div className="input-field">
+                <label htmlFor="transfer-destination">Cuenta de Destino</label>
+                <select
+                  id="transfer-destination"
+                  className="input-control"
+                  value={destinationAccountId}
+                  onChange={(e) => setDestinationAccountId(e.target.value)}
+                  disabled={isLoading || filteredDestinationOptions.length === 0}
+                >
+                  <option value="">Selecciona una cuenta destino</option>
+                  {filteredDestinationOptions.map((acc) => (
+                    <option key={acc.id} value={acc.id}>
+                      {acc.accountNumber} - {acc.status === 'ACTIVE' ? 'Activa' : 'Congelada'}
+                    </option>
+                  ))}
+                </select>
+                {filteredDestinationOptions.length === 0 && destinationSearch.trim() && (
+                  <span className="error-message">No se encontraron cuentas con ese número.</span>
+                )}
+                {fieldErrors['destinationAccountId'] && (
+                  <span className="error-message">{fieldErrors['destinationAccountId']}</span>
+                )}
+              </div>
             </div>
 
             <Input

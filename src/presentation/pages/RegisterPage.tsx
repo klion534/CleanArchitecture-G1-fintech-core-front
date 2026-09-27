@@ -65,45 +65,66 @@ export const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="page-card">
-      <h2>Registro de Usuario</h2>
-      {successMessage && <div className="alert alert-success">{successMessage}</div>}
-      <ErrorAlert error={generalError} />
-      <form onSubmit={handleSubmit} noValidate>
-        <Input
-          label="Nombre Completo"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          error={fieldErrors['name']}
-          disabled={isSubmitting}
-          required
-        />
-        <Input
-          label="Correo Electrónico"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          error={fieldErrors['email']}
-          disabled={isSubmitting}
-          required
-        />
-        <Input
-          label="Contraseña"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          error={fieldErrors['password']}
-          disabled={isSubmitting}
-          required
-        />
-        <Button type="submit" isLoading={isSubmitting} disabled={isSubmitting}>
-          Registrarse
-        </Button>
-      </form>
-      <p style={{ marginTop: '1rem' }}>
-        ¿Ya tienes cuenta? <Link to="/login">Inicia sesión aquí</Link>
-      </p>
+    <div className="auth-shell">
+      <div className="auth-hero">
+        <div className="auth-brand-block">
+          <span className="brand-icon auth-brand-icon">F</span>
+          <span>Panel financiero</span>
+        </div>
+        <h2>Crea tu cuenta y empieza a mover tu dinero.</h2>
+        <p>
+          Abre tu primera cuenta digital, monitorea tus saldos y gestiona movimientos con una experiencia moderna y segura.
+        </p>
+        <ul className="auth-benefits">
+          <li>Creación de cuentas en segundos</li>
+          <li>Panel financiero claro y organizado</li>
+          <li>Seguridad y confianza desde el primer acceso</li>
+        </ul>
+      </div>
+
+      <div className="page-card auth-panel">
+        <div className="auth-header">
+          <p className="eyebrow">Nuevo usuario</p>
+          <h2>Registro de Usuario</h2>
+        </div>
+        {successMessage && <div className="alert alert-success">{successMessage}</div>}
+        <ErrorAlert error={generalError} />
+        <form onSubmit={handleSubmit} noValidate>
+          <Input
+            label="Nombre Completo"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            error={fieldErrors['name']}
+            disabled={isSubmitting}
+            required
+          />
+          <Input
+            label="Correo Electrónico"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            error={fieldErrors['email']}
+            disabled={isSubmitting}
+            required
+          />
+          <Input
+            label="Contraseña"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            error={fieldErrors['password']}
+            disabled={isSubmitting}
+            required
+          />
+          <Button type="submit" isLoading={isSubmitting} disabled={isSubmitting}>
+            Registrarse
+          </Button>
+        </form>
+        <p className="auth-switcher">
+          ¿Ya tienes cuenta? <Link to="/login">Inicia sesión aquí</Link>
+        </p>
+      </div>
     </div>
   );
 };

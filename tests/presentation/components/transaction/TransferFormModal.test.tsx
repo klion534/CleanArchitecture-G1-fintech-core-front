@@ -52,8 +52,8 @@ describe('TransferFormModal', () => {
       />
     );
 
-    const destinationSelect = screen.getByLabelText('Cuenta de Destino');
-    fireEvent.change(destinationSelect, { target: { value: '' } });
+    const destinationSearch = screen.getByLabelText('Buscar cuenta de destino');
+    fireEvent.change(destinationSearch, { target: { value: '' } });
 
     fireEvent.click(screen.getByRole('button', { name: 'Confirmar Transferencia' }));
     const errorEl = await screen.findByText('La cuenta de destino es requerida');
@@ -73,6 +73,9 @@ describe('TransferFormModal', () => {
         onSubmit={onSubmit}
       />
     );
+
+    const destinationSearch = screen.getByLabelText('Buscar cuenta de destino');
+    fireEvent.change(destinationSearch, { target: { value: 'ACC-002' } });
 
     const destinationSelect = screen.getByLabelText('Cuenta de Destino');
     fireEvent.change(destinationSelect, { target: { value: validAccId2 } });
