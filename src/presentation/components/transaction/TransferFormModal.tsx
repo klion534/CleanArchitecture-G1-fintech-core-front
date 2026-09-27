@@ -30,15 +30,18 @@ export const TransferFormModal: React.FC<TransferFormModalProps> = ({
   onClose,
   onSubmit,
 }) => {
-  const [sourceAccountId, setSourceAccountId] = useState(defaultSourceAccountId || accounts[0]?.id || '');
+  const initialSourceAccountId = defaultSourceAccountId || accounts[0]?.id || '';
+  const [sourceAccountId, setSourceAccountId] = useState(initialSourceAccountId);
   const [destinationAccountId, setDestinationAccountId] = useState(
-    accounts.find((a) => a.id !== (defaultSourceAccountId || accounts[0]?.id))?.id || ''
+    accounts.find((a) => a.id !== initialSourceAccountId)?.id || ''
   );
   const [amountStr, setAmountStr] = useState('');
   const [description, setDescription] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   if (!isOpen) return null;
+
+  const destinationOptions = accounts.filter((account) => account.id !== sourceAccountId);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,7 +79,10 @@ export const TransferFormModal: React.FC<TransferFormModalProps> = ({
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-card" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h3>Transferencia de Fondos</h3>
+          <div>
+            <p className="eyebrow">Transferencias</p>
+            <h3>Transferencia de Fondos</h3>
+          </div>
           <button type="button" className="btn-close" onClick={onClose} disabled={isLoading}>
             &times;
           </button>
@@ -92,7 +98,14 @@ export const TransferFormModal: React.FC<TransferFormModalProps> = ({
                 id="transfer-source"
                 className="input-control"
                 value={sourceAccountId}
-                onChange={(e) => setSourceAccountId(e.target.value)}
+                onChange={(e) => {
+                  const nextSourceId = e.target.value;
+                  setSourceAccountId(nextSourceId);
+                  if (nextSourceId === destinationAccountId) {
+                    const fallback = accounts.find((acc) => acc.id !== nextSourceId)?.id || '';
+                    setDestinationAccountId(fallback);
+                  }
+                }}
                 disabled={isLoading}
               >
                 {accounts.map((acc) => (
@@ -107,17 +120,21 @@ export const TransferFormModal: React.FC<TransferFormModalProps> = ({
             </div>
 
             <div className="input-field">
-              <label htmlFor="transfer-destination">Cuenta de Destino (ID / UUID)</label>
-              <input
+              <label htmlFor="transfer-destination">Cuenta de Destino</label>
+              <select
                 id="transfer-destination"
-                type="text"
                 className="input-control"
-                placeholder="UUID de la cuenta destino"
                 value={destinationAccountId}
                 onChange={(e) => setDestinationAccountId(e.target.value)}
-                disabled={isLoading}
-                required
-              />
+                disabled={isLoading || destinationOptions.length === 0}
+              >
+                <option value="">Selecciona una cuenta destino</option>
+                {destinationOptions.map((acc) => (
+                  <option key={acc.id} value={acc.id}>
+                    {acc.accountNumber} - {acc.status === 'ACTIVE' ? 'Activa' : 'Congelada'}
+                  </option>
+                ))}
+              </select>
               {fieldErrors['destinationAccountId'] && (
                 <span className="error-message">{fieldErrors['destinationAccountId']}</span>
               )}

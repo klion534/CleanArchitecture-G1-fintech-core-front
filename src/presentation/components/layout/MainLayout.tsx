@@ -9,12 +9,15 @@ export const MainLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
     <div className="layout">
       <header className="navbar">
         <div className="nav-brand">
-          <Link to="/">Fintech Core</Link>
+          <Link to="/" className="brand-mark">
+            <span className="brand-icon">F</span>
+            <span>Fintech Core</span>
+          </Link>
         </div>
         <nav className="nav-links">
           {isAuthenticated ? (
             <>
-              <Link to="/dashboard">Dashboard</Link>
+              <Link to="/dashboard" className="nav-link">Dashboard</Link>
               <span className="user-email">{session?.user?.email}</span>
               <button type="button" onClick={logout} className="btn-logout">
                 Cerrar Sesión
@@ -22,8 +25,8 @@ export const MainLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
             </>
           ) : (
             <>
-              <Link to="/login">Iniciar Sesión</Link>
-              <Link to="/register">Registrarse</Link>
+              <Link to="/login" className="nav-link">Iniciar Sesión</Link>
+              <Link to="/register" className="nav-link">Registrarse</Link>
             </>
           )}
         </nav>

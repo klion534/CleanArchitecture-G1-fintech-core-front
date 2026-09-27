@@ -6,7 +6,24 @@ export const TransferMoneySchema = z.object({
     .uuid({ message: 'ID de cuenta de origen debe ser un UUID válido' }),
   destinationAccountId: z
     .string({ required_error: 'La cuenta de destino es requerida' })
-    .uuid({ message: 'ID de cuenta de destino debe ser un UUID válido' }),
+    .trim()
+    .superRefine((value, ctx) => {
+      if (!value || value.length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'La cuenta de destino es requerida',
+        });
+        return;
+      }
+
+      const uuidPattern = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+      if (!uuidPattern.test(value)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Debe seleccionar una cuenta de destino válida',
+        });
+      }
+    }),
   amount: z
     .number({ required_error: 'El monto es requerido' })
     .positive({ message: 'El monto a transferir debe ser un número estrictamente mayor a cero' }),

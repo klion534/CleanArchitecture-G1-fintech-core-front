@@ -320,6 +320,14 @@ describe('DashboardPage', () => {
           status: 'ACTIVE',
           createdAt: '2026-01-01'
         },
+        {
+          id: '987fc543-e89b-12d3-a456-426614174999',
+          userId: 'usr-1',
+          accountNumber: 'ACC-600',
+          balance: 900,
+          status: 'ACTIVE',
+          createdAt: '2026-01-01'
+        },
       ],
       selectedAccount: null,
       history: null,
@@ -347,8 +355,8 @@ describe('DashboardPage', () => {
 
     expect(screen.getByText('Transferencia de Fondos')).toBeDefined();
 
-    const destInput = screen.getByLabelText('Cuenta de Destino (ID / UUID)');
-    fireEvent.change(destInput, { target: { value: '987fc543-e89b-12d3-a456-426614174999' } });
+    const destSelect = screen.getByLabelText('Cuenta de Destino');
+    fireEvent.change(destSelect, { target: { value: '987fc543-e89b-12d3-a456-426614174999' } });
 
     const amountInput = screen.getByLabelText('Monto a Transferir');
     fireEvent.change(amountInput, { target: { value: '200' } });

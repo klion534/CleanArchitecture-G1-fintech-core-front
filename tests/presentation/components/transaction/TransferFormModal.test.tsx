@@ -40,7 +40,7 @@ describe('TransferFormModal', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it('muestra error de validación cuando el ID de destino es inválido', async () => {
+  it('muestra error de validación cuando no hay cuenta destino seleccionada', async () => {
     render(
       <TransferFormModal
         accounts={mockAccounts}
@@ -52,15 +52,15 @@ describe('TransferFormModal', () => {
       />
     );
 
-    const destInput = screen.getByLabelText('Cuenta de Destino (ID / UUID)');
-    fireEvent.change(destInput, { target: { value: 'invalid-id' } });
+    const destinationSelect = screen.getByLabelText('Cuenta de Destino');
+    fireEvent.change(destinationSelect, { target: { value: '' } });
 
     fireEvent.click(screen.getByRole('button', { name: 'Confirmar Transferencia' }));
-    const errorEl = await screen.findByText('ID de cuenta de destino debe ser un UUID válido');
+    const errorEl = await screen.findByText('La cuenta de destino es requerida');
     expect(errorEl).toBeDefined();
   });
 
-  it('envía datos de transferencia válidos', async () => {
+  it('envía datos de transferencia válidos usando la cuenta seleccionada por número', async () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined);
     render(
       <TransferFormModal
@@ -74,8 +74,8 @@ describe('TransferFormModal', () => {
       />
     );
 
-    const destInput = screen.getByLabelText('Cuenta de Destino (ID / UUID)');
-    fireEvent.change(destInput, { target: { value: validAccId2 } });
+    const destinationSelect = screen.getByLabelText('Cuenta de Destino');
+    fireEvent.change(destinationSelect, { target: { value: validAccId2 } });
 
     const amountInput = screen.getByLabelText('Monto a Transferir');
     fireEvent.change(amountInput, { target: { value: '200' } });
