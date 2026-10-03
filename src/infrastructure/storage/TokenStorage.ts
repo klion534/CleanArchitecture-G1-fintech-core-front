@@ -14,7 +14,7 @@ const TOKEN_KEY = 'fintech_auth_token';
 export class TokenStorage {
   static getToken(): string | null {
     try {
-      return localStorage.getItem(TOKEN_KEY);
+      return sessionStorage.getItem(TOKEN_KEY);
     } catch {
       return null;
     }
@@ -22,7 +22,7 @@ export class TokenStorage {
 
   static setToken(token: string): void {
     try {
-      localStorage.setItem(TOKEN_KEY, token);
+      sessionStorage.setItem(TOKEN_KEY, token);
     } catch {
       // Ignorar errores de almacenamiento (ej. modo privado restringido)
     }
@@ -30,7 +30,7 @@ export class TokenStorage {
 
   static removeToken(): void {
     try {
-      localStorage.removeItem(TOKEN_KEY);
+      sessionStorage.removeItem(TOKEN_KEY);
     } catch {
       // Ignorar errores
     }
